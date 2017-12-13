@@ -850,10 +850,10 @@ exit 1
     <ClInclude Include="toolframework_server.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ar_airboat.cpp" />
     <ClCompile Include="ar_checkpoint.cpp" />
     <ClCompile Include="ar_player.cpp" />
     <ClCompile Include="ar_startline.cpp" />
+    <ClCompile Include="ar_vehicle_camera.cpp" />
     <ClCompile Include="gamedll_replay.cpp" />
     <ClCompile Include="..\..\game\shared\achievement_saverestore.cpp" />
     <ClCompile Include="..\..\game\shared\achievementmgr.cpp" />

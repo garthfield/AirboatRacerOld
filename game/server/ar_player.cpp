@@ -39,14 +39,15 @@ void CAR_Player::Spawn(void)
 			pJeepCamera->SetAbsOrigin(cameraOrigin);
 			pJeepCamera->SetAbsAngles(cameraAngles);
 			pJeepCamera->SetParent(pJeep);
-			
+			DispatchSpawn(pJeepCamera);
+
 			variant_t emptyVariant;
 			pJeepCamera->AcceptInput("Enable", pPlayer, pPlayer, emptyVariant, 0);
 			pPlayer->SetViewEntity(pJeepCamera);
 		}
 
 		// Put driver inside vehicle immediately
-		/*pPlayer->GetInVehicle(pJeep->GetServerVehicle(), VEHICLE_ROLE_DRIVER);
+		pPlayer->GetInVehicle(pJeep->GetServerVehicle(), VEHICLE_ROLE_DRIVER);
 
 		// Reset animation to fix player angles and propeller animation
 		CBaseAnimating *pAnimating = dynamic_cast<CBaseAnimating *>(pJeep);
@@ -70,8 +71,7 @@ void CAR_Player::CreateAirboat(void)
 {
 	Vector vecForward;
 	AngleVectors(EyeAngles(), &vecForward);
-	//CBaseEntity *pJeep = (CBaseEntity*)CreateEntityByName("prop_vehicle_airboat");
-	CBaseEntity *pJeep = (CBaseEntity*)CreateEntityByName("prop_vehicle_ar_airboat");
+	CBaseEntity *pJeep = (CBaseEntity*)CreateEntityByName("prop_vehicle_airboat");
 	if (pJeep)
 	{
 		Vector vecOrigin = GetAbsOrigin() + vecForward * 128;
@@ -84,10 +84,15 @@ void CAR_Player::CreateAirboat(void)
 		pJeep->KeyValue("vehiclescript", "scripts/vehicles/airboat.txt");
 		DispatchSpawn(pJeep);
 		pJeep->Activate();
+
+		// Put driver inside vehicle immediately
+		GetInVehicle(pJeep->GetServerVehicle(), VEHICLE_ROLE_DRIVER);
+
+		// Create vehicle camera entity
+		CBaseEntity *pJeepCamera = (CBaseEntity*)CreateEntityByName("ar_vehicle_camera");
+		pJeepCamera->SetParent(pJeep);
+		DispatchSpawn(pJeepCamera);
 	}
-
-
-
 }
 
 

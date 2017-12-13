@@ -3574,7 +3574,7 @@
     <ClCompile Include="ar_startline.cpp">
       <Filter>Source Files\AirboatRacer</Filter>
     </ClCompile>
-    <ClCompile Include="ar_airboat.cpp">
+    <ClCompile Include="ar_vehicle_camera.cpp">
       <Filter>Source Files\AirboatRacer</Filter>
     </ClCompile>
   </ItemGroup>
