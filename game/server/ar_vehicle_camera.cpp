@@ -23,6 +23,8 @@ public:
 	void Move(void);
 	void CameraInit(void);
 	void CameraDampenEyeAngles(void);
+	void Think(void);
+	void DriverEntryExit(void);
 
 	// Always transmit to clients so they know where to move the view to
 	virtual int UpdateTransmitState();
@@ -40,6 +42,7 @@ private:
 	// used for moving the camera along a path (rail rides)
 	CBaseEntity *m_pPath;
 	CBaseEntity *pVehicle;
+	CBaseServerVehicle *pServerVehicle;
 	string_t m_sPath;
 	float m_flWait;
 	float m_flReturnTime;
@@ -100,7 +103,6 @@ END_DATADESC()
 
 void CAR_VehicalCamera::Spawn(void)
 {
-	DevMsg("CAR_VehicalCamera SPAWNED\n");
 	BaseClass::Spawn();
 
 	SetMoveType(MOVETYPE_NOCLIP);
@@ -123,12 +125,11 @@ void CAR_VehicalCamera::Spawn(void)
 }
 
 void CAR_VehicalCamera::CameraDampenEyeAngles(void) {
-	if (pVehicle) {
+	if (pVehicle && m_state == USE_ON) {
 		// Reduce x by 50% to soften the up/down motion
 		// Lock y & z to 0 to lock other motion
 		QAngle cameraAngles(pVehicle->GetAbsAngles().x * 0.5, pVehicle->GetAbsAngles().y + 90, 0);
 		SetAbsAngles(cameraAngles);
-		SetNextThink(gpGlobals->curtime);
 	}
 }
 
@@ -143,7 +144,7 @@ void CAR_VehicalCamera::CameraInit(void) {
 
 			// Retrieve vehicle
 			pVehicle = this->GetParent();
-			CBaseServerVehicle *pServerVehicle = dynamic_cast<CBaseServerVehicle *>(pVehicle->GetServerVehicle());
+			pServerVehicle = dynamic_cast<CBaseServerVehicle *>(pVehicle->GetServerVehicle());
 			if (pServerVehicle) {
 				DevMsg("CAR_VehicalCamera::Spawn retrieve vehicle\n");
 
@@ -158,18 +159,40 @@ void CAR_VehicalCamera::CameraInit(void) {
 				// Set camera origin & angles
 				SetAbsOrigin(cameraOrigin);
 				SetAbsAngles(cameraAngles);
-
-				// Check for driver and activate camrea
-				if (pServerVehicle->GetPassenger()) {
-					m_hPlayer = pServerVehicle->GetDriver();
-					Enable();
-				}
-
-				SetThink(&CAR_VehicalCamera::CameraDampenEyeAngles);
-				SetNextThink(gpGlobals->curtime);
 			}
 		}
 	}
+
+	SetThink(&CAR_VehicalCamera::Think);
+	SetNextThink(gpGlobals->curtime);
+}
+
+void CAR_VehicalCamera::DriverEntryExit(void) {
+	// Make sure the camera has a vehicle parent and vehicle pointers are still valid
+	if (this->GetParent() != NULL && pServerVehicle != NULL && pVehicle != NULL) {
+
+		// Check if there is a driver in the car but the camera isn't linked to him/her
+		if (pServerVehicle->GetDriver() && m_hPlayer == NULL) {
+			// Link camera to driver
+			m_hPlayer = pServerVehicle->GetDriver();
+			// Enable camera
+			Enable();
+		}
+		// Check if there's no driver but camera is still linked to them
+		else if (pServerVehicle->GetDriver() == NULL && m_hPlayer) {
+			// Disable camera, this also returns the players view entity to their own again
+			Disable();
+			// Unlink camera to driver
+			m_hPlayer = NULL;
+		}
+	}
+}
+
+// Check on each frame for driver actions and dampen eye angles
+void CAR_VehicalCamera::Think(void) {
+	DriverEntryExit();
+	CameraDampenEyeAngles();
+	SetNextThink(gpGlobals->curtime);
 }
 
 int CAR_VehicalCamera::UpdateTransmitState()
