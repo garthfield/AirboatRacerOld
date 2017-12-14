@@ -124,8 +124,9 @@ void CAR_VehicalCamera::Spawn(void)
 
 void CAR_VehicalCamera::CameraDampenEyeAngles(void) {
 	if (pVehicle) {
-		// Set y to 0 to lock left/right rotation
-		QAngle cameraAngles(pVehicle->GetAbsAngles().x, pVehicle->GetAbsAngles().y + 90, 0);
+		// Reduce x by 50% to soften the up/down motion
+		// Lock y & z to 0 to lock other motion
+		QAngle cameraAngles(pVehicle->GetAbsAngles().x * 0.5, pVehicle->GetAbsAngles().y + 90, 0);
 		SetAbsAngles(cameraAngles);
 		SetNextThink(gpGlobals->curtime);
 	}
