@@ -21,6 +21,8 @@ public:
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	void FollowTarget(void);
 	void Move(void);
+	void CameraInit(void);
+	void CameraDampenEyeAngles(void);
 
 	// Always transmit to clients so they know where to move the view to
 	virtual int UpdateTransmitState();
@@ -37,6 +39,7 @@ private:
 
 	// used for moving the camera along a path (rail rides)
 	CBaseEntity *m_pPath;
+	CBaseEntity *pVehicle;
 	string_t m_sPath;
 	float m_flWait;
 	float m_flReturnTime;
@@ -100,6 +103,36 @@ void CAR_VehicalCamera::Spawn(void)
 	DevMsg("CAR_VehicalCamera SPAWNED\n");
 	BaseClass::Spawn();
 
+	SetMoveType(MOVETYPE_NOCLIP);
+	SetSolid(SOLID_NONE);							// Remove model & collisions
+	SetRenderColorA(0);								// The engine won't draw this model if this is set to 0 and blending is on
+	m_nRenderMode = kRenderTransTexture;
+
+	m_state = USE_OFF;
+
+	m_initialSpeed = m_flSpeed;
+
+	if (m_acceleration == 0)
+		m_acceleration = 500;
+
+	if (m_deceleration == 0)
+		m_deceleration = 500;
+
+	DispatchUpdateTransmitState();
+	CameraInit();
+}
+
+void CAR_VehicalCamera::CameraDampenEyeAngles(void) {
+	if (pVehicle) {
+		// Set y to 0 to lock left/right rotation
+		QAngle cameraAngles(pVehicle->GetAbsAngles().x, pVehicle->GetAbsAngles().y + 90, 0);
+		SetAbsAngles(cameraAngles);
+		SetNextThink(gpGlobals->curtime);
+	}
+}
+
+void CAR_VehicalCamera::CameraInit(void) {
+
 	// Check we have a parent
 	if (this->GetParent() != NULL) {
 		const char *pszVehicleClass = this->GetParent()->GetClassname();
@@ -108,7 +141,7 @@ void CAR_VehicalCamera::Spawn(void)
 		if (strcmp(pszVehicleClass, "prop_vehicle_airboat") == 0 || strcmp(pszVehicleClass, "prop_vehicle_jeep") == 0) {
 
 			// Retrieve vehicle
-			CBaseEntity *pVehicle = this->GetParent();
+			pVehicle = this->GetParent();
 			CBaseServerVehicle *pServerVehicle = dynamic_cast<CBaseServerVehicle *>(pVehicle->GetServerVehicle());
 			if (pServerVehicle) {
 				DevMsg("CAR_VehicalCamera::Spawn retrieve vehicle\n");
@@ -131,26 +164,11 @@ void CAR_VehicalCamera::Spawn(void)
 					Enable();
 				}
 
+				SetThink(&CAR_VehicalCamera::CameraDampenEyeAngles);
+				SetNextThink(gpGlobals->curtime);
 			}
 		}
 	}
-
-	SetMoveType(MOVETYPE_NOCLIP);
-	SetSolid(SOLID_NONE);							// Remove model & collisions
-	SetRenderColorA(0);								// The engine won't draw this model if this is set to 0 and blending is on
-	m_nRenderMode = kRenderTransTexture;
-
-	//m_state = USE_OFF;
-
-	m_initialSpeed = m_flSpeed;
-
-	if (m_acceleration == 0)
-		m_acceleration = 500;
-
-	if (m_deceleration == 0)
-		m_deceleration = 500;
-
-	DispatchUpdateTransmitState();
 }
 
 int CAR_VehicalCamera::UpdateTransmitState()
