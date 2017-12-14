@@ -11,7 +11,7 @@
 // implementation of CHudHealth class
 //
 #include "cbase.h"
-#include "hud.h"
+/*#include "hud.h"
 #include "hud_macros.h"
 #include "view.h"
 
@@ -167,4 +167,4 @@ void CHudHealth::MsgFunc_Damage( bf_read &msg )
 			g_pClientMode->GetViewportAnimationController()->StartAnimationSequence("HealthDamageTaken");
 		}
 	}
-}
+}*/
