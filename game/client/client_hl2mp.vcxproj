@@ -493,6 +493,7 @@ exit 1
     <ClInclude Include="history_resource.h" />
     <ClInclude Include="hltvcamera.h" />
     <ClInclude Include="hud.h" />
+    <ClInclude Include="hud_airboatracer.h" />
     <ClInclude Include="hud_basechat.h" />
     <ClInclude Include="hud_basetimer.h" />
     <ClInclude Include="hud_bitmapnumericdisplay.h" />
@@ -886,6 +887,8 @@ exit 1
     <ClInclude Include="toolframework_client.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="hud_airboatracer.cpp" />
+    <ClCompile Include="hud_speed.cpp" />
     <ClCompile Include="mp3player.cpp" />
     <ClCompile Include="replay\cdll_replay.cpp" />
     <ClCompile Include="replay\replaycamera.cpp" />

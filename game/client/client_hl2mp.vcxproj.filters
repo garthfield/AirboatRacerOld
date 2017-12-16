@@ -58,6 +58,9 @@
     <Filter Include="Source Files\AirboatRacer">
       <UniqueIdentifier>{eafc35f0-d87a-4824-9ae1-3f87c7086ca0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\AirboatRacer\UI">
+      <UniqueIdentifier>{674460d8-e570-4330-ab17-b607270033ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\lib\public\bitmap.lib">
@@ -1946,6 +1949,9 @@
     <ClInclude Include="toolframework_client.h">
       <Filter>Tool Framework</Filter>
     </ClInclude>
+    <ClInclude Include="hud_airboatracer.h">
+      <Filter>Source Files\AirboatRacer\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mp3player.cpp">
@@ -3507,6 +3513,12 @@
     </ClCompile>
     <ClCompile Include="toolframework_client.cpp">
       <Filter>Tool Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="hud_speed.cpp">
+      <Filter>Source Files\AirboatRacer\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="hud_airboatracer.cpp">
+      <Filter>Source Files\AirboatRacer\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

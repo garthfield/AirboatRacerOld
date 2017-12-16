@@ -25,6 +25,7 @@ public:
 	virtual void VidInit(void);
 	virtual void Reset(void);
 	virtual void OnThink();
+	virtual void Paint(void);
 
 private:
 	int		m_iSpeed;
@@ -65,4 +66,17 @@ void CHudSpeed::OnThink()
 	IClientVehicle *pVehicle = pPlayer->GetVehicle();
 	C_PropVehicleDriveable *pDrivable = dynamic_cast<C_PropVehicleDriveable*>(pVehicle);
 	SetDisplayValue(pDrivable->GetSpeed());
+}
+
+void CHudSpeed::Paint(void)
+{
+	C_BasePlayer *pPlayer = C_BasePlayer::GetLocalPlayer();
+	if (!pPlayer || !pPlayer->IsInAVehicle())
+	{
+		return;
+	}
+
+	BaseClass::Paint();
+
+	SetFgColor(Color( 255, 255, 255, 255 ));
 }
