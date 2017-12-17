@@ -852,6 +852,7 @@ exit 1
   <ItemGroup>
     <ClCompile Include="ar_checkpoint.cpp" />
     <ClCompile Include="ar_player.cpp" />
+    <ClCompile Include="ar_powerup.cpp" />
     <ClCompile Include="ar_startline.cpp" />
     <ClCompile Include="ar_vehicle_camera.cpp" />
     <ClCompile Include="gamedll_replay.cpp" />

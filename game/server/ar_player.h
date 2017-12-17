@@ -6,6 +6,13 @@ class CAR_Player;
 
 #include "hl2mp_player.h"
 
+struct hud_message
+{
+	char const *type;
+	int valueByte = NULL;
+	char const *valueString = NULL;
+};
+
 class CAR_Player : public CHL2MP_Player
 {
 
@@ -26,6 +33,7 @@ public:
 	virtual void PreThink(void);
 	void CreatePowerup();
 	void ExecutePowerup(void);
+	void SendHudMessage(hud_message message);
 
 private:
 	int m_iPowerup;

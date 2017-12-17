@@ -60,8 +60,12 @@ void CAR_Powerup::StartTouch(CBaseEntity *pOther)
 		CPropVehicleDriveable *pDrivable = dynamic_cast<CPropVehicleDriveable*>(pOther);
 		if (pDrivable) {
 			CBaseEntity *pDriver = pDrivable->GetDriver();
-			CAR_Player *pPlayer = dynamic_cast<CAR_Player*>(pDriver);
-			pPlayer->CreatePowerup();
+			if (pDriver) {
+				CAR_Player *pPlayer = dynamic_cast<CAR_Player*>(pDriver);
+				if (pPlayer) {
+					pPlayer->CreatePowerup();
+				}
+			}
 		}
 	}
 

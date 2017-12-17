@@ -1,29 +1,18 @@
 #include "cbase.h"
-#include "triggers.h"
+#include "ar_startline.h"
+#include "ar_player.h"
+#include "fmtstr.h"
 
-class CAR_StartlineEntity : public CTriggerMultiple
-{
-public:
-	DECLARE_CLASS(CAR_StartlineEntity, CTriggerMultiple);
-	DECLARE_DATADESC();
-
-	void Spawn();
-	void StartTouch(CBaseEntity *pOther);
-	void SetPlayerCheckpoint(int iPlayerIndex, int iCheckpoint);
-
-private:
-	int	m_iPlayerCheckpoint[MAX_PLAYERS];	// Stores each player's current checkpoint
-	int	m_iPlayerLapCount[MAX_PLAYERS];		// Stores each player's laps completed
-	int m_iLastCheckpoint;
-};
+// NOTE: This has to be the last file included!
+#include "tier0/memdbgon.h"
 
 LINK_ENTITY_TO_CLASS(r_startline, CAR_StartlineEntity);
 
 BEGIN_DATADESC(CAR_StartlineEntity)
-DEFINE_KEYFIELD(m_iLastCheckpoint, FIELD_INTEGER, "lastCheck"),
+	DEFINE_KEYFIELD(m_iLastCheckpoint, FIELD_INTEGER, "lastCheck"),
 END_DATADESC()
 
-ConVar ar_laps("race_laps", "1", FCVAR_REPLICATED | FCVAR_NOTIFY, "Set the number of laps each race is", true, 1, false, 0);
+ConVar ar_laps("race_laps", "3", FCVAR_NOTIFY, "Set the number of laps each race is", true, 1, false, 0);
 
 void CAR_StartlineEntity::Spawn()
 {
@@ -39,6 +28,16 @@ void CAR_StartlineEntity::StartTouch(CBaseEntity *pOther)
 		if (m_iPlayerCheckpoint[iPlayerIndex] == m_iLastCheckpoint) {
 			m_iPlayerLapCount[iPlayerIndex]++;
 			m_iPlayerCheckpoint[iPlayerIndex] = 0;
+
+			// Send lap complete message via our player class
+			CAR_Player *pPlayer = dynamic_cast<CAR_Player*>(pOther);
+			if (pPlayer) {
+				CFmtStr str;
+				hud_message msg;
+				msg.type = "Lap";
+				msg.valueString = str.sprintf("%d/%d", m_iPlayerLapCount[iPlayerIndex]+1, ar_laps.GetInt());
+				pPlayer->SendHudMessage(msg);
+			}
 
 			if (m_iPlayerLapCount[iPlayerIndex] == ar_laps.GetInt()) {
 				DevMsg("Race Finished. Player: %d wins", iPlayerIndex);

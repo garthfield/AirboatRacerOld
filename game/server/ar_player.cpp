@@ -1,9 +1,13 @@
 #include "cbase.h"
 #include "ar_player.h"
+#include "ar_startline.h"
 #include "in_buttons.h"
 #include "vehicle_base.h"
+#include "fmtstr.h"
 
 LINK_ENTITY_TO_CLASS(player, CAR_Player);
+
+static ConVar show_powerup("show_powerup", "1", 0, "toggles powerup");
 
 CAR_Player::CAR_Player(void) {
 
@@ -18,6 +22,13 @@ void CAR_Player::Spawn(void)
 {
 	BaseClass::Spawn();
 	CreateAirboat();
+
+	// Send lap complete message via our player class
+	CFmtStr str;
+	hud_message msg;
+	msg.type = "Lap";
+	msg.valueString = str.sprintf("%d/%d", 1, ar_laps.GetInt());
+	SendHudMessage(msg);
 }
 
 void CAR_Player::CreateAirboat(void)
@@ -84,19 +95,10 @@ void CAR_Player::CreatePowerup()
 		m_iPowerup = RandomInt(1, 2);
 		DevMsg("CREATED POWER UP: %d", m_iPowerup);
 
-		// Create BasePlayer
-		CBasePlayer *pPlayer = (CBasePlayer *)this;
-
-		// Set message recipient
-		CSingleUserRecipientFilter filter((CBasePlayer *)pPlayer);
-		filter.MakeReliable();
-
-		// Create message 
-		UserMessageBegin(filter, "Powerup");
-		WRITE_BYTE(m_iPowerup);
-
-		// Send message
-		MessageEnd(); //send message
+		hud_message msg;
+		msg.type = "Powerup";
+		msg.valueByte = m_iPowerup;
+		SendHudMessage(msg);
 	}
 }
 
@@ -133,23 +135,30 @@ void CAR_Player::ExecutePowerup()
 	pVehicle->ApplyAbsVelocityImpulse(m_flPushSpeed * vecAbsDir);
 
 	// Send message to HUD setting the powerup to -1
-
-	// Create BasePlayer
-	CBasePlayer *pPlayer = (CBasePlayer *)this;
-
-	// Set message recipient
-	CSingleUserRecipientFilter filter((CBasePlayer *)pPlayer);
-	filter.MakeReliable();
-
-	// Create message 
-	UserMessageBegin(filter, "Powerup");
-	WRITE_BYTE(0);
-
-	// Send message
-	MessageEnd(); //send message
+	hud_message msg;
+	msg.type = "Powerup";
+	msg.valueByte = 0;
+	SendHudMessage(msg);
 
 	// Finished executing the power up now remove the powerup and player from the store
 	m_iPowerup = NULL;
+}
+
+void CAR_Player::SendHudMessage(hud_message message)
+{
+	// Set message recipient
+	CSingleUserRecipientFilter filter((CBasePlayer *)this);
+	filter.MakeReliable();
+
+	// Create message
+	UserMessageBegin(filter, message.type);
+	if (message.valueByte)
+		WRITE_BYTE(message.valueByte);
+	if (message.valueString)
+		WRITE_STRING(message.valueString);
+
+	// Send message
+	MessageEnd(); //send message
 }
 
 /*

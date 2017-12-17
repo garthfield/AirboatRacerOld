@@ -888,7 +888,6 @@ exit 1
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hud_airboatracer.cpp" />
-    <ClCompile Include="hud_speed.cpp" />
     <ClCompile Include="mp3player.cpp" />
     <ClCompile Include="replay\cdll_replay.cpp" />
     <ClCompile Include="replay\replaycamera.cpp" />
