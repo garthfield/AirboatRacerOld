@@ -1547,6 +1547,9 @@
     <ClInclude Include="..\..\game\shared\airboatracer\ar_definitions.h">
       <Filter>Source Files\Airboat Racer</Filter>
     </ClInclude>
+    <ClInclude Include="airboatracer\ar_game.h">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClInclude>
     <ClInclude Include="airboatracer\ar_player.h">
       <Filter>Source Files\Airboat Racer</Filter>
     </ClInclude>
@@ -2957,6 +2960,9 @@
       <Filter>Source Files\Airboat Racer</Filter>
     </ClCompile>
     <ClCompile Include="airboatracer\ar_client.cpp">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClCompile>
+    <ClCompile Include="airboatracer\ar_game.cpp">
       <Filter>Source Files\Airboat Racer</Filter>
     </ClCompile>
     <ClCompile Include="airboatracer\ar_player.cpp">

@@ -716,6 +716,7 @@
     <ClInclude Include="..\..\game\shared\weapon_proficiency.h" />
     <ClInclude Include="world.h" />
     <ClInclude Include="..\..\game\shared\airboatracer\ar_definitions.h" />
+    <ClInclude Include="airboatracer\ar_game.h" />
     <ClInclude Include="airboatracer\ar_player.h" />
     <ClInclude Include="airboatracer\ar_startline.h" />
     <ClInclude Include="hl2\ai_behavior_actbusy.h" />
@@ -1272,6 +1273,7 @@
     <ClCompile Include="world.cpp" />
     <ClCompile Include="airboatracer\ar_checkpoint.cpp" />
     <ClCompile Include="airboatracer\ar_client.cpp" />
+    <ClCompile Include="airboatracer\ar_game.cpp" />
     <ClCompile Include="airboatracer\ar_player.cpp" />
     <ClCompile Include="airboatracer\ar_powerup.cpp" />
     <ClCompile Include="airboatracer\ar_startline.cpp" />
