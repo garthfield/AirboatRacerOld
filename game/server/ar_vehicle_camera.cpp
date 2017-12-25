@@ -1,5 +1,9 @@
 #include "cbase.h"
+#include "ar_definitions.h"
 #include "vehicle_base.h"
+
+// memdbgon must be the last include file in a .cpp file!!!
+#include "tier0/memdbgon.h"
 
 #define SF_CAMERA_PLAYER_POSITION		1
 #define SF_CAMERA_PLAYER_TARGET			2
@@ -23,9 +27,10 @@ public:
 	void Move(void);
 	void CameraInit(void);
 	void CameraDampenEyeAngles(void);
+	void CameraSmoothOrigin(void);
 	void Think(void);
 	void DriverEntryExit(void);
-
+	
 	// Always transmit to clients so they know where to move the view to
 	virtual int UpdateTransmitState();
 
@@ -62,6 +67,7 @@ private:
 
 	int   m_nPlayerButtons;
 	int   m_nOldTakeDamage;
+	Vector m_OldOrigin;
 
 private:
 	COutputEvent m_OnEndFollow;
@@ -126,11 +132,46 @@ void CAR_VehicalCamera::Spawn(void)
 
 void CAR_VehicalCamera::CameraDampenEyeAngles(void) {
 	if (pVehicle && m_state == USE_ON) {
+
+		QAngle cameraAngles = pVehicle->GetAbsAngles();
+
 		// Reduce x by 50% to soften the up/down motion
 		// Lock y & z to 0 to lock other motion
-		QAngle cameraAngles(pVehicle->GetAbsAngles().x * 0.5, pVehicle->GetAbsAngles().y + 90, 0);
+		if (HasSpawnFlags(AR_CAMERA_TYPE_SEAT)) {
+			cameraAngles.x = pVehicle->GetAbsAngles().x * 0.5;
+			cameraAngles.y = pVehicle->GetAbsAngles().y + 90;
+			cameraAngles.z = 0;
+		}
+		else if (HasSpawnFlags(AR_CAMERA_TYPE_BIRDSEYE)) {
+			cameraAngles.x = 45;
+			cameraAngles.y = pVehicle->GetAbsAngles().y + 90;
+			cameraAngles.z = 0;
+		}
+		else if (HasSpawnFlags(AR_CAMERA_TYPE_FRONT)) {
+			cameraAngles.x = pVehicle->GetAbsAngles().x * 0.5;
+			cameraAngles.y = pVehicle->GetAbsAngles().y + 90;
+			cameraAngles.z = 0;
+		}
+		else if (HasSpawnFlags(AR_CAMERA_TYPE_BACK)) {
+			cameraAngles.x = pVehicle->GetAbsAngles().x * 0.5;
+			cameraAngles.y = pVehicle->GetAbsAngles().y - 90;
+			cameraAngles.z = 0;
+		}
+
 		SetAbsAngles(cameraAngles);
 	}
+}
+
+void CAR_VehicalCamera::CameraSmoothOrigin(void) {
+	/*if (pVehicle && m_state == USE_ON) {
+		if (HasSpawnFlags(AR_CAMERA_TYPE_BIRDSEYE)) {
+			Vector cameraOrigin = GetAbsOrigin();
+			Vector vehicleOrigin = pVehicle->GetAbsOrigin();
+			cameraOrigin.z = m_OldOrigin.z;
+			SetAbsOrigin(cameraOrigin);
+			m_OldOrigin = cameraOrigin;
+		}
+	}*/
 }
 
 void CAR_VehicalCamera::CameraInit(void) {
@@ -153,8 +194,35 @@ void CAR_VehicalCamera::CameraInit(void) {
 
 				Vector vecForward;
 				AngleVectors(cameraAngles, &vecForward);
-				Vector cameraOrigin = pVehicle->GetAbsOrigin() - vecForward * 10;
-				cameraOrigin.z += 62;
+
+				Vector cameraOrigin = pVehicle->GetAbsOrigin();
+
+				// Seat camera
+				if (HasSpawnFlags(AR_CAMERA_TYPE_SEAT)) {
+					cameraOrigin = cameraOrigin - vecForward * 10; // Seat position
+					cameraOrigin.z += 62;
+				}
+
+				// Birdseye camera
+				else if (HasSpawnFlags(AR_CAMERA_TYPE_BIRDSEYE)) {
+					cameraOrigin = cameraOrigin - vecForward * 300; // Position further back
+					cameraOrigin.z += 500; // High in the air
+				}
+
+				// Front camera - Low front
+				else if (HasSpawnFlags(AR_CAMERA_TYPE_FRONT)) {
+					cameraOrigin = cameraOrigin + vecForward * 34; // More forward
+					cameraOrigin.z += 30; // Low down
+				}
+
+				// Back camera
+				else if (HasSpawnFlags(AR_CAMERA_TYPE_BACK)) {
+					cameraOrigin = cameraOrigin - vecForward * 60; // Position further back
+					cameraOrigin.z += 62; // Seat height
+				}
+
+				// Store ready for first run of CameraSmoothOrigin()
+				m_OldOrigin = cameraOrigin;
 
 				// Set camera origin & angles
 				SetAbsOrigin(cameraOrigin);
@@ -167,31 +235,10 @@ void CAR_VehicalCamera::CameraInit(void) {
 	SetNextThink(gpGlobals->curtime);
 }
 
-void CAR_VehicalCamera::DriverEntryExit(void) {
-	// Make sure the camera has a vehicle parent and vehicle pointers are still valid
-	if (this->GetParent() != NULL && pServerVehicle != NULL && pVehicle != NULL) {
-
-		// Check if there is a driver in the car but the camera isn't linked to him/her
-		if (pServerVehicle->GetDriver() && m_hPlayer == NULL) {
-			// Link camera to driver
-			m_hPlayer = pServerVehicle->GetDriver();
-			// Enable camera
-			Enable();
-		}
-		// Check if there's no driver but camera is still linked to them
-		else if (pServerVehicle->GetDriver() == NULL && m_hPlayer) {
-			// Disable camera, this also returns the players view entity to their own again
-			Disable();
-			// Unlink camera to driver
-			m_hPlayer = NULL;
-		}
-	}
-}
-
 // Check on each frame for driver actions and dampen eye angles
 void CAR_VehicalCamera::Think(void) {
-	DriverEntryExit();
 	CameraDampenEyeAngles();
+	CameraSmoothOrigin();
 	SetNextThink(gpGlobals->curtime);
 }
 
@@ -274,7 +321,7 @@ void CAR_VehicalCamera::Enable(void)
 	}
 
 	// if the player was already under control of a similar trigger, disable the previous trigger.
-	{
+	/*{
 		CBaseEntity *pPrevViewControl = pPlayer->GetViewEntity();
 		if (pPrevViewControl && pPrevViewControl != pPlayer)
 		{
@@ -293,7 +340,7 @@ void CAR_VehicalCamera::Enable(void)
 				}
 			}
 		}
-	}
+	}*/
 
 
 	m_nPlayerButtons = pPlayer->m_nButtons;
@@ -608,3 +655,4 @@ void CAR_VehicalCamera::Move()
 	}
 
 }
+

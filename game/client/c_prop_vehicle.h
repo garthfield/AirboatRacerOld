@@ -79,6 +79,7 @@ public:
 	bool	IsRunningEnterExitAnim( void ) { return m_bEnterAnimOn || m_bExitAnimOn; }
 	// NVNT added to check if the vehicle needs to aim
 	virtual bool HasGun(void){return m_bHasGun;}
+	
 	// Added to retrieve speed of vehicle
 	virtual int GetSpeed(void){ return m_nSpeed; }
 

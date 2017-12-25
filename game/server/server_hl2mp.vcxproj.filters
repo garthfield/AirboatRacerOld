@@ -13,6 +13,9 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{BA03E055-4FA2-FCE3-8A1C-D348547D379C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Airboat Racer">
+      <UniqueIdentifier>{F4DC7E84-7B5F-9EC1-2D94-7A0D0931AEC0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\HL2 DLL">
       <UniqueIdentifier>{3C43D38A-46AF-2183-A5E5-44383B1D2652}</UniqueIdentifier>
     </Filter>
@@ -39,9 +42,6 @@
     </Filter>
     <Filter Include="VPC Scripts">
       <UniqueIdentifier>{A40EE377-781A-C6B9-0C7C-B3BE118D248E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\AirboatRacer">
-      <UniqueIdentifier>{9d2d2d10-0dcc-4a5c-aa9e-e4854c4dd399}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1544,6 +1544,15 @@
     <ClInclude Include="world.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\game\shared\airboatracer\ar_definitions.h">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClInclude>
+    <ClInclude Include="airboatracer\ar_player.h">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClInclude>
+    <ClInclude Include="airboatracer\ar_startline.h">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClInclude>
     <ClInclude Include="hl2\ai_behavior_actbusy.h">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClInclude>
@@ -1828,12 +1837,6 @@
     </ClInclude>
     <ClInclude Include="toolframework_server.h">
       <Filter>Tools Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="ar_player.h">
-      <Filter>Source Files\AirboatRacer</Filter>
-    </ClInclude>
-    <ClInclude Include="ar_startline.h">
-      <Filter>Source Files\AirboatRacer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2950,6 +2953,24 @@
     <ClCompile Include="world.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="airboatracer\ar_checkpoint.cpp">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClCompile>
+    <ClCompile Include="airboatracer\ar_client.cpp">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClCompile>
+    <ClCompile Include="airboatracer\ar_player.cpp">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClCompile>
+    <ClCompile Include="airboatracer\ar_powerup.cpp">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClCompile>
+    <ClCompile Include="airboatracer\ar_startline.cpp">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClCompile>
+    <ClCompile Include="airboatracer\ar_vehicle_camera.cpp">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClCompile>
     <ClCompile Include="hl2\ai_allymanager.cpp">
       <Filter>Source Files\HL2 DLL</Filter>
     </ClCompile>
@@ -3283,9 +3304,6 @@
     <ClCompile Include="hl2mp\hl2mp_bot_temp.cpp">
       <Filter>Source Files\HL2MP</Filter>
     </ClCompile>
-    <ClCompile Include="hl2mp\hl2mp_client.cpp">
-      <Filter>Source Files\HL2MP</Filter>
-    </ClCompile>
     <ClCompile Include="hl2mp\hl2mp_cvars.cpp">
       <Filter>Source Files\HL2MP</Filter>
     </ClCompile>
@@ -3564,21 +3582,6 @@
     </ClCompile>
     <ClCompile Include="toolframework_server.cpp">
       <Filter>Tools Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="ar_player.cpp">
-      <Filter>Source Files\AirboatRacer</Filter>
-    </ClCompile>
-    <ClCompile Include="ar_checkpoint.cpp">
-      <Filter>Source Files\AirboatRacer</Filter>
-    </ClCompile>
-    <ClCompile Include="ar_startline.cpp">
-      <Filter>Source Files\AirboatRacer</Filter>
-    </ClCompile>
-    <ClCompile Include="ar_vehicle_camera.cpp">
-      <Filter>Source Files\AirboatRacer</Filter>
-    </ClCompile>
-    <ClCompile Include="ar_powerup.cpp">
-      <Filter>Source Files\AirboatRacer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

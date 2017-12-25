@@ -6,7 +6,7 @@
 
 $Macro SRCDIR		"..\.."
 $Macro GAMENAME 	"hl2mp" [!$SOURCESDK]
-$Macro GAMENAME 	"mod_hl2mp" [$SOURCESDK]
+$Macro GAMENAME 	"AirboatRacer" [$SOURCESDK]
 
 $Include "$SRCDIR\game\server\server_base.vpc"
 $Include "$SRCDIR\game\server\nav_mesh.vpc" [$SOURCESDK]
@@ -15,7 +15,7 @@ $Configuration
 {
 	$Compiler
 	{
-		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\game\shared\hl2,.\hl2,.\hl2mp,$SRCDIR\game\shared\hl2mp"
+		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\game\shared\hl2,.\hl2,.\hl2mp,$SRCDIR\game\shared\hl2mp,.\airboatracer,$SRCDIR\game\shared\airboatracer"
 		$PreprocessorDefinitions		"$BASE;HL2MP;HL2_DLL"
 	}
 }
@@ -24,6 +24,19 @@ $Project "Server (HL2MP)"
 {
 	$Folder	"Source Files"
 	{
+		$Folder	"Airboat Racer"
+		{
+			$File	"airboatracer\ar_checkpoint.cpp"
+			$File	"airboatracer\ar_client.cpp"
+			$File	"airboatracer\ar_player.cpp"
+			$File	"airboatracer\ar_player.h"
+			$File	"airboatracer\ar_powerup.cpp"
+			$File	"airboatracer\ar_startline.cpp"
+			$File	"airboatracer\ar_startline.h"
+			$File	"airboatracer\ar_vehicle_camera.cpp"
+			$File	"$SRCDIR\game\shared\airboatracer\ar_definitions.h"
+		}
+
 		$File	"ai_relationship.cpp"
 		$File	"basegrenade_concussion.cpp"
 		$File	"basegrenade_contact.cpp"
@@ -246,7 +259,7 @@ $Project "Server (HL2MP)"
 		{
 			$File	"hl2mp\hl2mp_bot_temp.cpp"
 			$File	"hl2mp\hl2mp_bot_temp.h"
-			$File	"hl2mp\hl2mp_client.cpp"
+			//$File	"hl2mp\hl2mp_client.cpp"
 			$File	"hl2mp\hl2mp_cvars.cpp"
 			$File	"hl2mp\hl2mp_gameinterface.cpp"
 			$File	"hl2mp\hl2mp_gameinterface.h"

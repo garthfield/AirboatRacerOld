@@ -25,6 +25,9 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{BA03E055-4FA2-FCE3-8A1C-D348547D379C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Airboat Racer">
+      <UniqueIdentifier>{F4DC7E84-7B5F-9EC1-2D94-7A0D0931AEC0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\game_controls">
       <UniqueIdentifier>{1E7DB91A-DC0A-B17F-617D-4C4FB3FA7A3E}</UniqueIdentifier>
     </Filter>
@@ -54,12 +57,6 @@
     </Filter>
     <Filter Include="VPC Scripts">
       <UniqueIdentifier>{A40EE377-781A-C6B9-0C7C-B3BE118D248E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\AirboatRacer">
-      <UniqueIdentifier>{eafc35f0-d87a-4824-9ae1-3f87c7086ca0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\AirboatRacer\UI">
-      <UniqueIdentifier>{674460d8-e570-4330-ab17-b607270033ea}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1841,6 +1838,15 @@
     <ClInclude Include="viewpostprocess.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\game\shared\airboatracer\ar_definitions.h">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClInclude>
+    <ClInclude Include="airboatracer\hud_airboatracer.h">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClInclude>
+    <ClInclude Include="airboatracer\hud_leaders.h">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClInclude>
     <ClInclude Include="game_controls\basemodel_panel.h">
       <Filter>Source Files\game_controls</Filter>
     </ClInclude>
@@ -1948,9 +1954,6 @@
     </ClInclude>
     <ClInclude Include="toolframework_client.h">
       <Filter>Tool Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="hud_airboatracer.h">
-      <Filter>Source Files\AirboatRacer\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2995,6 +2998,12 @@
     <ClCompile Include="WorldDimsProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="airboatracer\hud_airboatracer.cpp">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClCompile>
+    <ClCompile Include="airboatracer\hud_leaders.cpp">
+      <Filter>Source Files\Airboat Racer</Filter>
+    </ClCompile>
     <ClCompile Include="game_controls\basemodel_panel.cpp">
       <Filter>Source Files\game_controls</Filter>
     </ClCompile>
@@ -3513,9 +3522,6 @@
     </ClCompile>
     <ClCompile Include="toolframework_client.cpp">
       <Filter>Tool Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="hud_airboatracer.cpp">
-      <Filter>Source Files\AirboatRacer\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

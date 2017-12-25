@@ -47,6 +47,7 @@ void RegisterUserMessages( void )
 	usermessages->Register( "UpdateJalopyRadar", -1 );
 	usermessages->Register( "Powerup", -1 );
 	usermessages->Register( "Lap", -1);
+	usermessages->Register( "Leaders", MAX_PLAYERS*2);
 
 #ifndef _X360
 	// NVNT register haptic user messages

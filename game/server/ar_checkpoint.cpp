@@ -2,6 +2,9 @@
 #include "triggers.h"
 #include "ar_startline.h"
 
+// memdbgon must be the last include file in a .cpp file!!!
+#include "tier0/memdbgon.h"
+
 class CAR_CheckpointEntity : public CTriggerMultiple
 {
 public:
@@ -23,20 +26,20 @@ END_DATADESC()
 
 void CAR_CheckpointEntity::Spawn()
 {
-	DevMsg("Spawned Checkpoint\n");
+	Msg("Spawned Checkpoint\n");
 	BaseClass::Spawn();
 }
 
 void CAR_CheckpointEntity::StartTouch(CBaseEntity *pOther)
 {
 	if (stricmp(pOther->GetClassname(), "player") == 0) {
-		DevMsg("StartTouch entity:%s\n", pOther->GetClassname());
+		Msg("Checkpoint %d player %d\n", m_iIndex, pOther->entindex());
 		
 		CBaseEntity *pStartlineEntity = NULL;
 		CAR_StartlineEntity *pStartpoint = NULL;
 		if ((pStartlineEntity = gEntList.FindEntityByClassname(NULL, "r_startline")) != NULL) {
 			pStartpoint = dynamic_cast<CAR_StartlineEntity *>(pStartlineEntity);
-			pStartpoint->SetPlayerCheckpoint(pOther->entindex()-1, m_iIndex);
+			pStartpoint->SetPlayerCheckpoint(pOther->entindex(), m_iIndex);
 		}
 	}
 }

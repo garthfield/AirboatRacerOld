@@ -33,22 +33,22 @@ void CAR_Powerup::Spawn(void)
 {
 	Precache();
 
-	BaseClass::Spawn();
+	UseClientSideAnimation();
 
+	SetPlaybackRate(1.0);
 	SetModel("models/pickup/pickup.mdl");
 	ResetSequence(LookupSequence("Idle"));
-	
-	SetThink(&CAR_Powerup::PowerupThink);
-	SetNextThink(gpGlobals->curtime + 0.1f);
 
 	AddSolidFlags(FSOLID_NOT_SOLID | FSOLID_TRIGGER);
 	VPhysicsInitNormal(SOLID_BBOX, GetSolidFlags(), false);
+
+	SetThink(&CAR_Powerup::PowerupThink);
+	SetNextThink(gpGlobals->curtime + 0.1f);
 }
 
 void CAR_Powerup::PowerupThink()
 {
 	StudioFrameAdvance();
-	DispatchAnimEvents(this);
 	SetNextThink(gpGlobals->curtime + 0.1f);
 }
 
@@ -71,4 +71,3 @@ void CAR_Powerup::StartTouch(CBaseEntity *pOther)
 
 	BaseClass::StartTouch(pOther);
 }
-

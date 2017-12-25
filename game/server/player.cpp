@@ -4801,6 +4801,7 @@ USES AND SETS GLOBAL g_pLastSpawn
 */
 CBaseEntity *CBasePlayer::EntSelectSpawnPoint()
 {
+	DevMsg("HL2MP_Player::EntSelectSpawnPoint\n");
 	CBaseEntity *pSpot;
 	edict_t		*player;
 
